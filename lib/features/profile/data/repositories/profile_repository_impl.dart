@@ -19,8 +19,9 @@ class ProfileRepositoryImpl implements ProfileRepository {
   Future<UserModel?> getProfile() async {
     try {
       final response = await apiClient.get(NetworkUrls.getProfile());
-      if (response['success'] == true && response['user'] != null) {
-        return UserModel.fromJson(response['user']);
+      // API returns {name, email, phone} directly at root level
+      if (response != null && response['name'] != null) {
+        return UserModel.fromJson(response);
       }
       return null;
     } catch (e) {

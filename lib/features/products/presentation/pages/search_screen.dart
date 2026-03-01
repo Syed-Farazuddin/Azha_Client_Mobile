@@ -89,7 +89,7 @@ class SearchScreen extends ConsumerWidget {
                       originalPrice: prod.originalPrice,
                       rating: prod.rating,
                       reviewCount: prod.numReviews,
-                      onTap: () => context.go('/product/${prod.id}'),
+                      onTap: () => context.push('/product/${prod.id}'),
                     );
                   },
                 );

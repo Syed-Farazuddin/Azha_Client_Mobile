@@ -18,8 +18,9 @@ class ProductRepositoryImpl implements ProductRepository {
   Future<ProductModel?> getProductById(String id) async {
     try {
       final response = await apiClient.get(NetworkUrls.getProductById(id));
-      if (response['sucess'] == true || response['success'] == true) {
-        return ProductModel.fromJson(response['product']);
+      // API returns the product object directly at the root level
+      if (response != null && response['id'] != null) {
+        return ProductModel.fromJson(response);
       }
       return null;
     } catch (e) {

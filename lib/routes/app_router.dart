@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile/features/auth/presentation/pages/login_screen.dart';
 import 'package:mobile/features/auth/presentation/pages/register_screen.dart';
@@ -27,9 +28,30 @@ class NavigationObserver extends NavigatorObserver {
   }
 }
 
+const _publicRoutes = ['/login', '/register'];
+
 final GoRouter router = GoRouter(
   observers: [NavigationObserver()],
   initialLocation: "/login",
+  redirect: (context, state) async {
+    const storage = FlutterSecureStorage();
+    final token = await storage.read(key: 'token');
+    final isLoggedIn = token != null && token.isNotEmpty;
+    final isOnAuthPage = _publicRoutes.contains(state.matchedLocation);
+
+    // If logged in and trying to access login/register, go to home
+    if (isLoggedIn && isOnAuthPage) {
+      return '/home';
+    }
+
+    // If NOT logged in and trying to access a protected route, go to login
+    if (!isLoggedIn && !isOnAuthPage) {
+      return '/login';
+    }
+
+    // No redirect needed
+    return null;
+  },
   routes: [
     GoRoute(
       name: "login",

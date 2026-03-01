@@ -1,6 +1,5 @@
 import 'package:mobile/core/network/api_client.dart';
 import 'package:mobile/core/network/urls.dart';
-import 'package:mobile/features/auth/data/models/user_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>((ref) {

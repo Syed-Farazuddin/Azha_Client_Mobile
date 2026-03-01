@@ -20,7 +20,7 @@ final apiClientServiceProvider = Provider<ApiClientService>((ref) {
 class ApiClientService {
   ApiClientService({required this.dio, required this.storage}) {
     dio
-      ..options.baseUrl = dotenv.env['BASE_URL']!
+      ..options.baseUrl = dotenv.env['BASE_URL'] ?? 'http://localhost:3001/api/'
       ..options.connectTimeout = const Duration(minutes: 10)
       ..options.receiveTimeout = const Duration(minutes: 10)
       ..options.headers = {'Accept': 'application/json'}
@@ -36,6 +36,11 @@ class ApiClientService {
   final Dio dio;
   final Storage storage;
 
+  Future<Options> _authOptions() async {
+    final token = await storage.read(key: 'token');
+    return Options(headers: {"Authorization": "Bearer $token"});
+  }
+
   Future<dynamic> get(
     String url, {
     Map<String, dynamic>? queryParameters,
@@ -47,11 +52,7 @@ class ApiClientService {
       final response = await dio.get(
         url,
         queryParameters: queryParameters,
-        options:
-            options ??
-            Options(
-              headers: {"Authorization": await storage.read(key: 'token')},
-            ),
+        options: options ?? await _authOptions(),
         cancelToken: cancelToken,
         onReceiveProgress: onRecieveProgress,
       );
@@ -168,11 +169,7 @@ class ApiClientService {
         url,
         data: body,
         queryParameters: queryParameters,
-        options:
-            options ??
-            Options(
-              headers: {"Authorization": await storage.read(key: 'token')},
-            ),
+        options: options ?? await _authOptions(),
         cancelToken: cancelToken,
         onReceiveProgress: onRecieveProgress,
       );
@@ -209,11 +206,7 @@ class ApiClientService {
         url,
         data: body,
         queryParameters: queryParameters,
-        options:
-            options ??
-            Options(
-              headers: {"Authorization": await storage.read(key: 'token')},
-            ),
+        options: options ?? await _authOptions(),
         cancelToken: cancelToken,
         onReceiveProgress: onRecieveProgress,
       );
@@ -238,11 +231,7 @@ class ApiClientService {
       final response = await dio.delete(
         url,
         queryParameters: queryParameters,
-        options:
-            options ??
-            Options(
-              headers: {"Authorization": await storage.read(key: 'token')},
-            ),
+        options: options ?? await _authOptions(),
         cancelToken: cancelToken,
       );
       return response.data;

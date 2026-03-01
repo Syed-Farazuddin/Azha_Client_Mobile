@@ -29,18 +29,18 @@ class HomeScreen extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.search, color: AppColors.white),
-            onPressed: () => context.go('/search'),
+            onPressed: () => context.push('/search'),
           ),
           IconButton(
             icon: const Icon(
               Icons.shopping_bag_outlined,
               color: AppColors.white,
             ),
-            onPressed: () => context.go('/cart'),
+            onPressed: () => context.push('/cart'),
           ),
           IconButton(
             icon: const Icon(Icons.person_outline, color: AppColors.white),
-            onPressed: () => context.go('/profile'),
+            onPressed: () => context.push('/profile'),
           ),
         ],
       ),
@@ -178,7 +178,7 @@ class HomeScreen extends ConsumerWidget {
                         originalPrice: prod.originalPrice,
                         rating: prod.rating,
                         reviewCount: prod.numReviews,
-                        onTap: () => context.go('/product/${prod.id}'),
+                        onTap: () => context.push('/product/${prod.id}'),
                       );
                     },
                   );
@@ -228,7 +228,7 @@ class HomeScreen extends ConsumerWidget {
                         originalPrice: prod.originalPrice,
                         rating: prod.rating,
                         reviewCount: prod.numReviews,
-                        onTap: () => context.go('/product/${prod.id}'),
+                        onTap: () => context.push('/product/${prod.id}'),
                       );
                     },
                   ),
